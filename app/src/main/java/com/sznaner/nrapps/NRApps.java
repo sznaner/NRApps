@@ -14,28 +14,28 @@ import java.util.List;
 public class NRApps {
 
 
-    private Context context;
-
     public List<String> installApps = new ArrayList<>();
 
 
-    public static void init(Context context){
-        NRApps.getInstance().context = context;
+    public static void init(Context context) {
+        List<String> apps = getInstallApps(context, false);
+        NRApps.getInstance().installApps = apps;
     }
-    public static Boolean has(String packageName){
+    public static Boolean has(String packageName) {
         return NRApps.getInstance().installApps.contains(packageName);
     }
-    public static List<String>apps(){
+    public static List<String> apps() {
         return NRApps.getInstance().installApps;
     }
-
 
 
     //私有方法
     private NRApps() {
         init();
     }
+
     private static volatile NRApps mInstance = null;
+
     private static NRApps getInstance() {
         if (mInstance == null) {
             synchronized (NRApps.class) {
@@ -48,14 +48,18 @@ public class NRApps {
     }
 
     private void init() {
-        installApps.clear();
-        List<ApplicationInfo> list = getInstallAppInfo(false);
-        for (ApplicationInfo app : list){
-            installApps.add(app.packageName);
-        }
+
     }
 
-    private List<ApplicationInfo> getInstallAppInfo(boolean hasSystemApp) {
+    public static List<String> getInstallApps(Context context, boolean hasSystemApp){
+        List<ApplicationInfo> apps = getInstallAppInfos(context, hasSystemApp);
+        List<String> list = new ArrayList<>();
+        for (ApplicationInfo app : apps) {
+            list.add(app.packageName);
+        }
+        return list;
+    }
+    private static List<ApplicationInfo> getInstallAppInfos(Context context, boolean hasSystemApp) {
         if(context == null){
             Log.e("NRApps","请先初始化:NRApps.init(context)");
             return new ArrayList<>();
