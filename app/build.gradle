@@ -1,8 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 //group='com.github.coderzhuxh'  //注意com.github.后面的为github账号
-group='com.gitee.sznaner'   //你gitee上自己的名
-
+//group='com.gitee.sznaner'   //你gitee上自己的名
+group='com.github.sznaner'   //你gitee上自己的名
 
 android {
     compileSdkVersion 30
