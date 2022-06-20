@@ -25,9 +25,12 @@ public class NRApps {
     public static Boolean has(String packageName){
         return NRApps.getInstance().installApps.contains(packageName);
     }
+    public static List<String>apps(){
+        return NRApps.getInstance().installApps;
+    }
 
 
-    
+
     //私有方法
     private NRApps() {
         init();
