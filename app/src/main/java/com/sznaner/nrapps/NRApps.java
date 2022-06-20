@@ -15,13 +15,25 @@ public class NRApps {
 
 
     private Context context;
+
     public List<String> installApps = new ArrayList<>();
 
+
+    public static void init(Context context){
+        NRApps.getInstance().context = context;
+    }
+    public static Boolean has(String packageName){
+        return NRApps.getInstance().installApps.contains(packageName);
+    }
+
+
+    
+    //私有方法
     private NRApps() {
         init();
     }
     private static volatile NRApps mInstance = null;
-    public static NRApps getInstance() {
+    private static NRApps getInstance() {
         if (mInstance == null) {
             synchronized (NRApps.class) {
                 if (mInstance == null) {
@@ -39,14 +51,6 @@ public class NRApps {
             installApps.add(app.packageName);
         }
     }
-
-    public static void init(Context context){
-        NRApps.getInstance().context = context;
-    }
-    public static Boolean has(String packageName){
-       return NRApps.getInstance().installApps.contains(packageName);
-    }
-
 
     private List<ApplicationInfo> getInstallAppInfo(boolean hasSystemApp) {
         if(context == null){
@@ -83,8 +87,6 @@ public class NRApps {
                 filterApplicationInfos.add(applicationInfo);
             }
         }
-
-
         return filterApplicationInfos;
     }
 
