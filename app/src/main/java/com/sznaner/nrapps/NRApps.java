@@ -18,7 +18,7 @@ public class NRApps {
 
 
     public static void init(Context context) {
-        List<String> apps = getInstallApps(context, false);
+        List<String> apps = getInstallApps(context, true);
         NRApps.getInstance().installApps = apps;
     }
     public static Boolean has(String packageName) {
