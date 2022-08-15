@@ -52,47 +52,83 @@ public class NRApps {
     }
 
     public static List<String> getInstallApps(Context context, boolean hasSystemApp){
-        List<ApplicationInfo> apps = getInstallAppInfos(context, hasSystemApp);
+        List<ApplicationInfo> apps = getInstallAppInfos(context, hasSystemApp,new ArrayList<String>());
         List<String> list = new ArrayList<>();
-        for (ApplicationInfo app : apps) {
-            list.add(app.packageName);
+        try {
+            for (ApplicationInfo app : apps) {
+                if(app == null){
+                    continue;
+                }
+                if(app.packageName==null){
+                    continue;
+                }
+                list.add(app.packageName);
+            }
+        }catch (Exception e){
+            Log.e("NRApps","getInstallApps_error");
         }
         return list;
     }
-    private static List<ApplicationInfo> getInstallAppInfos(Context context, boolean hasSystemApp) {
+
+
+    public static List<ApplicationInfo> getInstallAppInfos(Context context, boolean hasSystemApp,List<String> excludePackageNames) {
         if(context == null){
             Log.e("NRApps","请先初始化:NRApps.init(context)");
             return new ArrayList<>();
         }
-        PackageManager packageManager = context.getPackageManager();
-        String selfPackageName = context.getPackageName();
         List<ApplicationInfo> filterApplicationInfos = new ArrayList<>();
-        List<PackageInfo> packageInfos = packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
-        for (PackageInfo packageInfo : packageInfos) {
-            if (packageInfo == null) {
-                continue;
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            if(packageManager == null){
+                Log.e("NRApps","packageManager == null");
+                return filterApplicationInfos;
             }
-            if (packageInfo.applicationInfo == null || packageInfo.packageName == null) {
-                continue;
+            String selfPackageName = context.getPackageName();
+            if(selfPackageName == null){
+                Log.e("NRApps","selfPackageName == null");
+                selfPackageName = "";
             }
-            if (packageInfo.packageName.equals(selfPackageName)) {
-                continue;
-            }
-            if (!packageInfo.applicationInfo.enabled) {
-                continue;
-            }
-            Intent launchIntent = packageManager.getLaunchIntentForPackage(packageInfo.packageName);
-            if (launchIntent == null) {
-                continue;
-            }
-            ApplicationInfo applicationInfo = packageInfo.applicationInfo;
-            if (!hasSystemApp) {
-                if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
-                    filterApplicationInfos.add(applicationInfo);
+            List<PackageInfo> packageInfos = packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
+            if(packageInfos != null){
+                for (PackageInfo packageInfo : packageInfos) {
+                    if (packageInfo == null) {
+                        continue;
+                    }
+                    ApplicationInfo applicationInfo = packageInfo.applicationInfo;
+                    String packageName = packageInfo.packageName;
+                    if(applicationInfo == null){
+                        continue;
+                    }
+                    if(packageName == null){
+                        continue;
+                    }
+                    if (packageName.equals(selfPackageName)) {//排除自身
+                        continue;
+                    }
+                    if(excludePackageNames != null){
+                        if(excludePackageNames.contains(packageName)){//排除指定app
+                            continue;
+                        }
+                    }
+                    if (!applicationInfo.enabled) {
+                        continue;
+                    }
+                    Intent launchIntent = packageManager.getLaunchIntentForPackage(packageName);
+                    if (launchIntent == null) {
+                        continue;
+                    }
+
+                    if (!hasSystemApp) {
+                        if ((applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != ApplicationInfo.FLAG_SYSTEM) {
+                            filterApplicationInfos.add(applicationInfo);
+                        }
+                    } else {
+                        filterApplicationInfos.add(applicationInfo);
+                    }
                 }
-            } else {
-                filterApplicationInfos.add(applicationInfo);
             }
+        }catch (Exception e){
+            Log.e("NRApps","getInstallAppInfos_error");
         }
         return filterApplicationInfos;
     }
