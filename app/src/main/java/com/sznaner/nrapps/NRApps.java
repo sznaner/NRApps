@@ -19,10 +19,12 @@ public class NRApps {
 
 
     public static void init(Context context) {
+        Log.e(TAG,"init(context)");
         List<String> apps = getInstallApps(context, true);
         NRApps.getInstance().installApps = apps;
     }
     public static Boolean has(String packageName) {
+        if(packageName == null) return false;
         return NRApps.getInstance().installApps.contains(packageName);
     }
     public static List<String> apps() {
@@ -50,7 +52,7 @@ public class NRApps {
     }
 
     private void init() {
-
+        Log.e(TAG,"init");
     }
 
     public static List<String> getInstallApps(Context context, boolean hasSystemApp){
