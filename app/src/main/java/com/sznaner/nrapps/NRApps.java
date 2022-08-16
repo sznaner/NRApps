@@ -14,6 +14,7 @@ import java.util.List;
 public class NRApps {
 
 
+    private static String TAG = "NRApps";
     public List<String> installApps = new ArrayList<>();
 
 
@@ -27,6 +28,7 @@ public class NRApps {
     public static List<String> apps() {
         return NRApps.getInstance().installApps;
     }
+
 
 
     //私有方法
@@ -65,27 +67,28 @@ public class NRApps {
                 list.add(app.packageName);
             }
         }catch (Exception e){
-            Log.e("NRApps","getInstallApps_error");
+            Log.e(TAG,"getInstallApps_error");
         }
         return list;
     }
 
 
     public static List<ApplicationInfo> getInstallAppInfos(Context context, boolean hasSystemApp,List<String> excludePackageNames) {
+        Log.e(TAG,"start");
         if(context == null){
-            Log.e("NRApps","请先初始化:NRApps.init(context)");
+            Log.e(TAG,"请先初始化:NRApps.init(context)");
             return new ArrayList<>();
         }
         List<ApplicationInfo> filterApplicationInfos = new ArrayList<>();
         try {
             PackageManager packageManager = context.getPackageManager();
             if(packageManager == null){
-                Log.e("NRApps","packageManager == null");
+                Log.e(TAG,"packageManager == null");
                 return filterApplicationInfos;
             }
             String selfPackageName = context.getPackageName();
             if(selfPackageName == null){
-                Log.e("NRApps","selfPackageName == null");
+                Log.e(TAG,"selfPackageName == null");
                 selfPackageName = "";
             }
             List<PackageInfo> packageInfos = packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
@@ -128,8 +131,9 @@ public class NRApps {
                 }
             }
         }catch (Exception e){
-            Log.e("NRApps","getInstallAppInfos_error");
+            Log.e(TAG,"getInstallAppInfos_error");
         }
+        Log.e(TAG,"end");
         return filterApplicationInfos;
     }
 
