@@ -93,7 +93,7 @@ public class NRApps {
                 Log.e(TAG,"selfPackageName == null");
                 selfPackageName = "";
             }
-            List<PackageInfo> packageInfos = packageManager.getInstalledPackages(PackageManager.MATCH_UNINSTALLED_PACKAGES);
+            List<PackageInfo> packageInfos = packageManager.getInstalledPackages(0);
             if(packageInfos != null){
                 for (PackageInfo packageInfo : packageInfos) {
                     if (packageInfo == null) {
