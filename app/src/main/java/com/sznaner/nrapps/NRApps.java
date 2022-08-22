@@ -216,12 +216,14 @@ public class NRApps {
             synchronized (NRApps.class) {
                 PackageManager packageManager = context.getPackageManager();
                 if(packageManager != null){
-                    info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);//类型PackageManager.GET_SIGNATURES,不要改,获取签名要用到
+                    try {
+                        info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);//类型PackageManager.GET_SIGNATURES,不要改,获取签名要用到
+                    }catch (Exception e){}
                     if(info != null){
                         NRApps.getInstance().cachePackageInfoMaps.put(packageName,info);
+                        Log.d(TAG,"getPackageInfo_ok");
                     }
                 }
-                Log.d(TAG,"getPackageInfo_ok");
             }
         } catch (Exception e) {
             e.printStackTrace();
