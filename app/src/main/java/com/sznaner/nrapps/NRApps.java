@@ -67,7 +67,7 @@ public class NRApps {
     }
 
     public static List<ApplicationInfo> getInstallAppInfos(Boolean hasSystemApp,List<String> excludePackageNames) {
-        Log.d(TAG,"getInstallAppInfos_start");
+        //Log.d(TAG,"getInstallAppInfos_start");
         Context context = NRApps.getInstance().context;
         if(context == null){
             Log.e(TAG,"请先NRApps.init(Context context)");
@@ -128,13 +128,13 @@ public class NRApps {
                     }
                 }
 
-                Log.i(TAG,"getInstallAppInfos_ok");
+                //Log.i(TAG,"getInstallAppInfos_ok");
             }
 
         }catch (Exception e){
             Log.e(TAG,"getInstallAppInfos_error");
         }
-        Log.i(TAG,"getInstallAppInfos_end");
+        //Log.i(TAG,"getInstallAppInfos_end");
         return res_Infos;
     }
 
@@ -204,7 +204,7 @@ public class NRApps {
         return appVersionName;
     }
     public static PackageInfo getPackageInfo(String packageName){
-        Log.d(TAG,"getPackageInfo_start");
+        //Log.d(TAG,"getPackageInfo_start");
         Context context = NRApps.getInstance().context;
         if(context == null){
             Log.e(TAG,"请先NRApps.init(Context context)");
@@ -221,14 +221,14 @@ public class NRApps {
                     }catch (Exception e){}
                     if(info != null){
                         NRApps.getInstance().cachePackageInfoMaps.put(packageName,info);
-                        Log.d(TAG,"getPackageInfo_ok");
+                        //Log.d(TAG,"getPackageInfo_ok");
                     }
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.d(TAG,"getPackageInfo_end");
+        //Log.d(TAG,"getPackageInfo_end");
         return info;
     }
 
